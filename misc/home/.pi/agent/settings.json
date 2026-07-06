@@ -1,11 +1,9 @@
 {
-  "lastChangelogVersion": "0.80.2",
+  "lastChangelogVersion": "0.80.3",
   "defaultProvider": "deepseek",
   "defaultModel": "deepseek-v4-pro",
   "defaultThinkingLevel": "xhigh",
   "hideThinkingBlock": false,
   "theme": "dark",
-  "packages": [
-    "npm:pi-web-access"
-  ]
+  "packages": []
 }
