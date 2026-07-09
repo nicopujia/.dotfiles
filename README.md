@@ -4,78 +4,39 @@
 
 Prerequisite: `curl`.
 
-The installer bootstraps [Homebrew](https://brew.sh) if it is missing. Homebrew then installs GNU Stow, Bun, uv, formulae, and casks from `misc/Brewfile`.
-
 ```bash
-git clone https://github.com/nicopujia/dotfiles.git
-cd dotfiles
+cd ~
+git clone https://github.com/nicopujia/dotfiles.git .dotfiles
+cd .dotfiles
 ./install.sh
 ```
 
-## Structure
-
-```
-.
-├── README.md                This guide
-├── install.sh               Sets everything up
-├── .gitignore               Ignore rules
-└── misc/
-    ├── Brewfile             Homebrew formulae and casks
-    ├── uv-tools.txt         uv-managed global tools
-    ├── shell-config.sh      → ~/.zshrc (macOS) or ~/.bash_aliases (Linux)
-    ├── AGENTS.md            Global pi agent instructions (also available at ~/.pi/)
-    └── home/                Stow package → symlinks to ~
-        └── ...              → ~/...
-```
-
-## Packages
-
-Machine-level packages are managed in three places:
-
-- `misc/Brewfile` controls Homebrew formulae and casks, including `bun` and `uv`
-- `misc/uv-tools.txt` controls global tools installed with `uv tool install`
-- `misc/home/.bun/install/global/package.json` controls global Bun packages
-
-Repo-level tools such as test frameworks, formatters, and formatter plugins should live in the repo that uses them, not in these dotfiles.
-
-Obsidian is installed as a cask, but Obsidian vault config is intentionally not tracked yet.
-
-## Pi (AI Coding Agent)
-
-[Pi](https://pi.dev) configuration is tracked under `misc/home/.pi/`:
-
-| File | Live location | Purpose |
-|------|---------------|---------|
-| `misc/home/.pi/AGENTS.md` | `~/.pi/AGENTS.md` | Global agent instructions (behavior, package preferences, conventions) |
-| `misc/home/.pi/agent/settings.json` | `~/.pi/agent/settings.json` | Provider, model, theme, installed packages |
-
-Machine-specific data (auth, trust decisions, session history, downloaded binaries) is not tracked.
+The installer bootstraps Homebrew if it is missing, which then installs GNU Stow, Bun, uv, formulae, and casks.
 
 ## Secrets
 
-Create `~/.env` for private keys (not tracked):
+Create `~/.env` for private values (not tracked):
 
 ```bash
-# Add your API keys here
 export API_KEY="your-key-here"
-export OAUTH_TOKEN="your-token-here"
+export WHATEVER_SECRET_YOU_HAVE="goes-here"
 ```
 
 The shell config automatically sources `~/.env` if it exists.
 
 ## Workflow
 
-**Files are symlinked** - edit in the repo, changes apply immediately:
+**Files are symlinked**, so you edit in the repo, and changes apply immediately.
 
 **Sync to another machine:**
 
 ```bash
-cd ~/dotfiles && git pull
+cd ~/.dotfiles && git pull && ./install
 ```
 
 **If you edited the live file directly** (e.g., `~/.zshrc`), copy changes back:
 
 ```bash
-cp ~/.zshrc ~/dotfiles/misc/shell-config.sh
-cd ~/dotfiles && git diff && git commit -am "Update shell config"
+cp ~/.zshrc ~/.dotfiles/misc/shell-config.sh
+cd ~/.dotfiles && git commit -am "Update shell config"
 ```
