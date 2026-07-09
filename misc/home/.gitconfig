@@ -40,6 +40,7 @@
 	pf = push --force
 	pn = push --no-verify
 	pfn = push --force --no-verify
+	pnf = pfn
 
 	# Pull
 	pl = pull
@@ -97,13 +98,19 @@
 	d = diff
 	t = tag
 	r = restore
-	chp = cherry-pick
+	cp = cherry-pick
 	rv = revert
 	wt = worktree
+	co = checkout
 
     # Combinations
+    fix = !git can && git pf
+
+	clear-changes = !sh -c 'git restore \"$1\" && git clean -fd \"$1\"' -
+	cc = clear-changes
+
 	cmp = !sh -c 'git cm \"$1\" && git p' -
-	fix = !git can && git pf
+	cmpprcf = !sh -c 'git cmp \"$1\" && gh prcf' -
 
 	ac = !git aa && git c
 	acm = !git aa && git cm
@@ -113,20 +120,8 @@
 	acan = !git aa && git can
 	afix = !git aa && git fix
 
-	cmpprcf = !sh -c 'git cmp \"$1\" && gh prcf' -
-	sccmpprcf = !sh -c 'git sc \"$1\" && git cmp \"$2\" && gh prcf' -
-	asccmpprcf = !git aa && git sccmpprcf
-	branch-commit-push-pr = sccmpprcf
-	a-branch-commit-push-pr = asccmpprcf
-	bcppr = branch-commit-push-pr
-	abcppr = a-branch-commit-push-pr
-
-	clear-branches = "!git fetch -p && for branch in $(git branch --format \"%(refname:short)\" | grep -v \"^main$\"); do gone=$(git for-each-ref --format \"%(upstream:track)\" \"refs/heads/$branch\"); if [ \"$gone\" = \"[gone]\" ]; then git branch -D \"$branch\"; elif mergeBase=$(git merge-base main \"$branch\" 2>/dev/null) && squash=$(git commit-tree \"${branch}^{tree}\" -p \"$mergeBase\" -m _ 2>/dev/null) && git cherry main \"$squash\" 2>/dev/null | grep -q \"^-\"; then git branch -D \"$branch\"; fi; done"
-	cb = clear-branches
-
-	clear-changes = !sh -c 'git restore \"$1\" && git clean -fd \"$1\"' -
-	cc = clear-changes
-	co = checkout
+	# Create a branch, commit and push changes, create and squash-merge a PR, then return and delete the local and remote branch
+	ship = "!f() { branch=\"$1\"; commit=\"${2:-$branch}\"; initial_branch=$(git branch --show-current); if [ -z \"$branch\" ]; then echo 'usage: git ship <branch> [commit message]' >&2; return 2; fi; git sc \"$branch\" && git acmp \"$commit\" && gh prcf && gh pr merge --squash && git s \"$initial_branch\" && git bd \"$branch\" && git push origin --delete \"$branch\"; }; f"
 [core]
 	editor = vim
 [color]

@@ -108,6 +108,7 @@
     "svg": ["html"],
     "jinja": ["HTML-jinja"],
     ".inputrc": ["Shell Script"],
+    ".gitconfig": ["TOML"],
   },
 
   // AI
