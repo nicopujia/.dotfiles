@@ -121,7 +121,7 @@
 	afix = !git aa && git fix
 
 	# Create a branch, commit and push changes, create and squash-merge a PR, then return and delete the local and remote branch
-	ship = "!f() { branch=\"$1\"; commit=\"${2:-$branch}\"; initial_branch=$(git branch --show-current); if [ -z \"$branch\" ]; then echo 'usage: git ship <branch> [commit message]' >&2; return 2; fi; git sc \"$branch\" && git acmp \"$commit\" && gh prcf && gh pr merge --squash && git s \"$initial_branch\" && git bd \"$branch\" && git push origin --delete \"$branch\"; }; f"
+	ship = "!f() { branch=\"$1\"; commit=\"${2:-$branch}\"; initial_branch=$(git branch --show-current); if [ -z \"$branch\" ]; then echo 'usage: git ship <branch> [commit message]' >&2; return 2; fi; git sc \"$branch\" && git acmp \"$commit\" && gh prcf && gh pr merge --squash && git s \"$initial_branch\" && git bd \"$branch\" && git push origin --delete \"$branch\" && g pl; }; f"
 [core]
 	editor = vim
 [color]
