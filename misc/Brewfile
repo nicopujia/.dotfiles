@@ -8,6 +8,7 @@ brew "gh"
 brew "oven-sh/bun/bun"
 brew "stow"
 brew "syncthing"
+brew "tree"
 brew "uv"
 brew "zoxide"
 
