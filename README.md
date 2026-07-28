@@ -24,6 +24,22 @@ export WHATEVER_SECRET_YOU_HAVE="goes-here"
 
 The shell config automatically sources `~/.env` if it exists.
 
+## Syncthing
+
+Used for two-way file sync between machines (e.g. VPS ↔ laptop) without a cloud
+intermediary. Installed via the Brewfile.
+
+Each machine generates its own device ID on first run — this is stateful,
+per-machine data, so it's intentionally **not** tracked in this repo (unlike
+the rest of the symlinked config). Set it up per machine instead:
+
+```bash
+brew services start syncthing
+# Open http://127.0.0.1:8384, grab this machine's device ID from
+# Actions -> Show ID, then add each other machine as a remote device
+# and share a folder between them.
+```
+
 ## Workflow
 
 **Files are symlinked**, so you edit in the repo, and changes apply immediately.
