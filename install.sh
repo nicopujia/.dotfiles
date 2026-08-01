@@ -86,7 +86,7 @@ find "$MISC_DIR/home" -mindepth 1 -type d | sort -r | while read -r dir; do
         echo "  Removed dir symlink $target"
     fi
 done
-find "$MISC_DIR/home" -type f | while read -r file; do
+find "$MISC_DIR/home" \( -type f -o -type l \) | while read -r file; do
     target="$HOME/${file#"$MISC_DIR/home/"}"
     if [[ -e "$target" || -L "$target" ]]; then
         rm -f "$target"
