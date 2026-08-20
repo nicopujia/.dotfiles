@@ -43,6 +43,20 @@ ensure_homebrew() {
     require_cmd brew "Homebrew installation completed, but brew is not available on PATH."
 }
 
+ensure_tmux_plugins() {
+    # .tmux.conf ends in `run '~/.tmux/plugins/tpm/tpm'`, which does nothing at
+    # all when tpm is absent, so resurrect and continuum would never load.
+    local plugins_dir="$HOME/.tmux/plugins"
+
+    for plugin in tpm tmux-resurrect tmux-continuum; do
+        if [[ -d "$plugins_dir/$plugin" ]]; then
+            continue
+        fi
+        echo "Installing tmux plugin $plugin..."
+        git clone --depth 1 "https://github.com/tmux-plugins/$plugin" "$plugins_dir/$plugin"
+    done
+}
+
 install_uv_tools() {
     if [[ ! -f "$MISC_DIR/uv-tools.txt" ]]; then
         return
@@ -114,6 +128,8 @@ else
     echo "Unknown OS: $OSTYPE"
     exit 1
 fi
+
+ensure_tmux_plugins
 
 install_uv_tools
 
